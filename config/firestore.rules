@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default Deny: All paths are strictly closed unless explicitly authorized
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // User Data Isolation: Every user can only read and write to their own isolated document tree
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      // Isolated journal entries subcollection
+      match /journal_entries/{entryId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // Isolated cognitive insights subcollection
+      match /insights/{insightId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // Isolated action items subcollection
+      match /action_items/{itemId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+  }
+}
