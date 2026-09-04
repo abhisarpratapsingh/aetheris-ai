@@ -62,6 +62,10 @@ export default function Home() {
     audioDurationSec?: number,
     location?: any
   ) => {
+    if (!user || !authToken) {
+      setIsAuthOpen(true);
+      return;
+    }
     setIsAnalyzing(true);
     try {
       const res = await fetch('/api/journal/analyze', {
