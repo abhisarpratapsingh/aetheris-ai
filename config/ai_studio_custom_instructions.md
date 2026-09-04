@@ -89,8 +89,32 @@
   * **Environment & Prerequisites**: Specific instructions on enabling necessary Google Cloud APIs (Cloud Run, Secret Manager, Firestore) and installing the Firebase / Google Cloud SDK (`gcloud` CLI).
   * **Secret Management Setup**: Step-by-step guidance on creating Secret Manager secrets (e.g., `GEMINI_API_KEY`) and granting the Cloud Run runtime service account the necessary Secret Accessor IAM permissions.
   * **Database Security Configuration**: Instructions for provisioning Cloud Firestore and deploying secure, owner-bound security rules (`firestore.rules`).
-  * **Cloud Run Deployment Flow**: Pre-formatted, container-friendly deploy instructions utilizing the `gcloud run deploy` command.
-  * **Required Campaign Labeling**: Detailed instructions on applying the mandatory resource label to register the service for automated challenge verification.
+* **Mandatory Execution Criteria**: When invoked, the model must output a fully populated, copy-pasteable README structure including:
+  1. **Firestore Security Rules**:
+     ```javascript
+     rules_version = '2';
+     service cloud.firestore {
+       match /databases/{database}/documents {
+         match /users/{userId}/interactions/{interactionId} {
+           allow read, write: if request.auth != null && request.auth.uid == userId;
+         }
+       }
+     }
+     ```
+  2. **Secret Manager Bindings**:
+     ```bash
+     gcloud secrets create GEMINI_API_KEY --replication-policy="automatic"
+     echo -n "YOUR_API_KEY" | gcloud secrets versions add GEMINI_API_KEY --data-file=-
+     gcloud secrets add-iam-policy-binding GEMINI_API_KEY \
+       --member="serviceAccount:YOUR_PROJECT_NUMBER-compute@developer.gserviceaccount.com" \
+       --role="roles/secretmanager.secretAccessor"
+     ```
+  3. **Verification Binding**:
+     ```bash
+     gcloud run services update <SERVICE_NAME> \
+       --update-labels=dev-tutorial=cloud-run-ai-challenge \
+       --region=<REGION>
+     ```
 
 ---
 
