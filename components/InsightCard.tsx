@@ -21,7 +21,9 @@ export const InsightCard: React.FC<InsightCardProps> = ({ analysis, onDeepDive }
           </div>
           <div>
             <h3 className="font-semibold text-sm text-slate-100">Executive Cognitive Synthesis</h3>
-            <p className="text-[11px] text-slate-400">Gemini 2.0 Flash • Threat-modeled Output</p>
+            <p className="text-[11px] text-slate-400">
+              {analysis.securityStamp?.modelUsed || 'Gemini 3.6 Flash'} • Threat-modeled Output
+            </p>
           </div>
         </div>
 

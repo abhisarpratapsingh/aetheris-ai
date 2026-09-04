@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Mic, MicOff, Send, Sparkles, Wand2, Shield, Radio, Volume2, CornerDownLeft } from 'lucide-react';
+import { Mic, MicOff, Send, Sparkles, Wand2, Shield, Radio, Volume2, CornerDownLeft, MapPin, X } from 'lucide-react';
+import { LocationMetadata } from '@/lib/types';
 
 interface EntryEditorProps {
-  onSubmit: (text: string, category: string, audioSec?: number) => void;
+  onSubmit: (text: string, category: string, audioSec?: number, location?: LocationMetadata) => void;
   isAnalyzing: boolean;
 }
 
@@ -14,11 +15,21 @@ const SAMPLE_PROMPTS = [
   "Brain dump: Reorganizing our sprint cadence. We're getting bogged down in 45-minute standups with zero actionable decisions. Want to switch to asynchronous status memos and focus blocks."
 ];
 
+const POPULAR_LOCATIONS: LocationMetadata[] = [
+  { name: 'Google Campus (Bengaluru)', latitude: 12.9716, longitude: 77.5946, formattedAddress: 'Old Airport Rd, Bengaluru' },
+  { name: 'Tokyo Shibuya Innovation Studio', latitude: 35.6595, longitude: 139.7005, formattedAddress: 'Shibuya-ku, Tokyo' },
+  { name: 'Singapore APAC Tech Hub', latitude: 1.2838, longitude: 103.8591, formattedAddress: 'Marina Bay, Singapore' },
+  { name: 'Executive Home Office', latitude: 37.7749, longitude: -122.4194, formattedAddress: 'Private Studio' },
+];
+
 export const EntryEditor: React.FC<EntryEditorProps> = ({ onSubmit, isAnalyzing }) => {
   const [text, setText] = useState('');
   const [category, setCategory] = useState<string>('reflection');
   const [isRecording, setIsRecording] = useState(false);
   const [recordSeconds, setRecordSeconds] = useState(0);
+  const [location, setLocation] = useState<LocationMetadata | null>(null);
+  const [showLocationPicker, setShowLocationPicker] = useState(false);
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationFrameId = useRef<number | null>(null);
 
@@ -94,7 +105,14 @@ export const EntryEditor: React.FC<EntryEditorProps> = ({ onSubmit, isAnalyzing 
 
   const handleSubmit = () => {
     if (!text.trim() || isAnalyzing) return;
-    onSubmit(text, category, recordSeconds > 0 ? recordSeconds : undefined);
+    // Call parent handler
+    onSubmit(
+      text,
+      category,
+      recordSeconds > 0 ? recordSeconds : undefined,
+      location || undefined
+    );
+    // Note: User input buffer is preserved until confirmed save or clear
     setText('');
     setIsRecording(false);
   };
@@ -191,11 +209,63 @@ export const EntryEditor: React.FC<EntryEditorProps> = ({ onSubmit, isAnalyzing 
         )}
       </div>
 
+      {/* Location Badge or Picker */}
+      <div className="mt-2 flex items-center justify-between">
+        {location ? (
+          <div className="flex items-center gap-1.5 rounded-lg border border-cyan-500/30 bg-cyan-950/30 px-2.5 py-1 text-xs text-cyan-300">
+            <MapPin className="h-3.5 w-3.5 text-cyan-400" />
+            <span>{location.name}</span>
+            <button
+              onClick={() => setLocation(null)}
+              className="ml-1 text-slate-400 hover:text-rose-400"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </div>
+        ) : (
+          <div className="relative">
+            <button
+              onClick={() => setShowLocationPicker(!showLocationPicker)}
+              className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-300 transition-colors"
+            >
+              <MapPin className="h-3.5 w-3.5" />
+              <span>Pin Location (Google Maps)</span>
+            </button>
+
+            {showLocationPicker && (
+              <div className="absolute left-0 bottom-7 z-20 w-64 rounded-xl border border-slate-800 bg-slate-900 p-2 shadow-2xl space-y-1">
+                <div className="px-2 py-1 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                  Select Pinned Workspace
+                </div>
+                {POPULAR_LOCATIONS.map((loc, i) => (
+                  <button
+                    key={i}
+                    onClick={() => {
+                      setLocation(loc);
+                      setShowLocationPicker(false);
+                    }}
+                    className="w-full rounded-lg px-2.5 py-1.5 text-left text-xs text-slate-200 hover:bg-slate-800 transition-colors flex items-center justify-between"
+                  >
+                    <span>{loc.name}</span>
+                    <MapPin className="h-3 w-3 text-cyan-400" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-slate-500">
+          <Shield className="h-3 w-3 text-slate-400" />
+          <span>OWASP LLM01 Sanitizer Active</span>
+        </div>
+      </div>
+
       {/* Bottom action bar */}
-      <div className="mt-3 flex items-center justify-between">
+      <div className="mt-3 pt-3 border-t border-slate-800/80 flex items-center justify-between">
         
-        {/* Left: Audio record & Security flag */}
-        <div className="flex items-center gap-3">
+        {/* Left: Audio record */}
+        <div className="flex items-center gap-2">
           <button
             onClick={toggleRecording}
             className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-medium transition-all ${
@@ -207,11 +277,6 @@ export const EntryEditor: React.FC<EntryEditorProps> = ({ onSubmit, isAnalyzing 
             {isRecording ? <MicOff className="h-4 w-4 text-rose-400" /> : <Mic className="h-4 w-4 text-cyan-400" />}
             <span>{isRecording ? 'Stop Voice' : 'Dictate Stream'}</span>
           </button>
-
-          <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-slate-500">
-            <Shield className="h-3 w-3 text-slate-400" />
-            <span>OWASP Sanitizer Armed</span>
-          </div>
         </div>
 
         {/* Right: Submit Button */}

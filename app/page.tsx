@@ -58,7 +58,12 @@ export default function Home() {
     }
   };
 
-  const handleCreateEntry = async (rawText: string, category: string, audioDurationSec?: number) => {
+  const handleCreateEntry = async (
+    rawText: string,
+    category: string,
+    audioDurationSec?: number,
+    location?: any
+  ) => {
     setIsAnalyzing(true);
     try {
       const res = await fetch('/api/journal/analyze', {
@@ -67,7 +72,7 @@ export default function Home() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${authToken}`,
         },
-        body: JSON.stringify({ rawText, category, audioDurationSec }),
+        body: JSON.stringify({ rawText, category, audioDurationSec, location }),
       });
 
       const data = await res.json();
@@ -75,6 +80,9 @@ export default function Home() {
         setCurrentEntry(data.entry);
         setHistory((prev) => [data.entry, ...prev]);
         setActiveTab('stream');
+        if (data.persistenceWarning) {
+          console.warn('[Persistence Warning]:', data.persistenceWarning);
+        }
       } else {
         alert(`Analysis error: ${data.error || 'Unknown error'}`);
       }

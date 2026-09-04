@@ -5,7 +5,16 @@ export interface JournalEntry {
   timestamp: number;
   category?: 'reflection' | 'brainstorm' | 'problem-solving' | 'debrief' | 'stream-of-consciousness';
   audioDurationSec?: number;
+  location?: LocationMetadata;
   analysis?: CognitiveAnalysis;
+}
+
+export interface LocationMetadata {
+  name: string;
+  latitude?: number;
+  longitude?: number;
+  placeId?: string;
+  formattedAddress?: string;
 }
 
 export interface CognitiveAnalysis {
@@ -52,6 +61,8 @@ export interface SecurityStamp {
   uidValidated: boolean;
   owaspRulePassed: string[];
   executionTimeMs: number;
+  modelUsed?: string;
+  fallbackAttempts?: number;
   threatDetails?: string;
 }
 

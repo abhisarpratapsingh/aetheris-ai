@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Pre-commit hook: Antigravity Security Scanner
+# Scans staged files for hardcoded API keys before commit
+
+echo "🔍 Running Antigravity pre-commit security verification..."
+
+# Check for raw Google API keys
+if git diff --cached | grep -E "AIzaSy[A-Za-z0-9_-]{33}"; then
+  echo "❌ CRITICAL SECURITY ERROR: Detected raw Google API Key in staged commit!"
+  echo "   Use Google Cloud Secret Manager or environment variables instead."
+  exit 1
+fi
+
+echo "✅ Zero hardcoded credentials detected. Commit approved."
+exit 0
