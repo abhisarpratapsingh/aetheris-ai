@@ -16,13 +16,8 @@ import { JournalEntry, UserProfile, CognitiveAnalysis } from '@/lib/types';
 import { Sparkles, Brain, CheckSquare, Network, History, Shield, Flame, Activity, ArrowRight, Search, Filter } from 'lucide-react';
 
 export default function Home() {
-  const [user, setUser] = useState<UserProfile | null>({
-    uid: 'executive-judge-001',
-    displayName: 'Executive Judge',
-    email: 'judge.evaluator@google.challenge.internal',
-    photoURL: null,
-  });
-  const [authToken, setAuthToken] = useState<string>('DEMO_SANDBOX_TOKEN');
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [authToken, setAuthToken] = useState<string>('');
 
   const [activeTab, setActiveTab] = useState<'stream' | 'matrix' | 'constellation' | 'vault'>('stream');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -156,6 +151,52 @@ export default function Home() {
       {/* Main Container */}
       <main className="flex-1 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         
+        {/* Unauthenticated Landing State CTA */}
+        {!user && (
+          <div className="relative overflow-hidden rounded-2xl border border-cyan-500/30 bg-gradient-to-r from-cyan-950/40 via-indigo-950/30 to-purple-950/20 p-6 backdrop-blur-xl shadow-2xl">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+              <div className="space-y-2 max-w-2xl">
+                <div className="flex items-center gap-2">
+                  <span className="flex h-2 w-2 rounded-full bg-cyan-400 animate-ping"></span>
+                  <span className="font-mono text-xs uppercase tracking-widest text-cyan-400 font-semibold">
+                    Google Cloud Run AI Challenge • Authentication Required
+                  </span>
+                </div>
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+                  Welcome to Aetheris AI — Cognitive Second Brain
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  Sign in with Firebase Auth to bind your user session to an isolated, multi-turn Firestore memory store, secured by Cloud Secret Manager.
+                </p>
+                <div className="flex flex-wrap items-center gap-3 pt-1 text-[11px] text-slate-400 font-mono">
+                  <span className="flex items-center gap-1 text-emerald-400">
+                    <Shield className="h-3.5 w-3.5" /> Firebase Auth
+                  </span>
+                  <span>•</span>
+                  <span className="flex items-center gap-1 text-indigo-300">
+                    <Brain className="h-3.5 w-3.5" /> Multi-turn Gemini 3.6
+                  </span>
+                  <span>•</span>
+                  <span className="flex items-center gap-1 text-cyan-300">
+                    <Activity className="h-3.5 w-3.5" /> Firestore User Isolation
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row w-full md:w-auto items-stretch sm:items-center gap-3 shrink-0">
+                <button
+                  onClick={() => setIsAuthOpen(true)}
+                  className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 px-5 py-3 text-xs sm:text-sm font-semibold text-white hover:from-cyan-400 hover:to-indigo-500 transition-all shadow-lg shadow-indigo-500/25"
+                >
+                  <Sparkles className="h-4 w-4" />
+                  <span>Sign In / Launch Sandbox</span>
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Daily Executive Briefing & Focus Horizon Hero */}
         <ExecutiveBriefing
           entries={history}
