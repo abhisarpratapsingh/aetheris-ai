@@ -103,7 +103,10 @@ export async function generateContentWithFallback(
   throw lastError || new Error('All models in fallback ladder exhausted.');
 }
 
-export async function runCognitiveAnalysis(sanitizedText: string): Promise<{
+export async function runCognitiveAnalysis(
+  sanitizedText: string,
+  location?: { name?: string; formattedAddress?: string }
+): Promise<{
   analysis: CognitiveAnalysis;
   keySource: 'secret_manager' | 'env_var' | 'mock';
   modelUsed: string;
@@ -120,11 +123,13 @@ export async function runCognitiveAnalysis(sanitizedText: string): Promise<{
     };
   }
 
+  const locationContext = location?.name ? `\n[Geo-Context: User is currently at ${location.name}${location.formattedAddress ? ` (${location.formattedAddress})` : ''}]` : '';
+
   const requestBody = {
     contents: [
       {
         role: 'user',
-        parts: [{ text: `Analyze and decompose the following journal reflection:\n\n"""\n${sanitizedText}\n"""` }],
+        parts: [{ text: `Analyze and decompose the following journal reflection:${locationContext}\n\n"""\n${sanitizedText}\n"""` }],
       },
     ],
     systemInstruction: {

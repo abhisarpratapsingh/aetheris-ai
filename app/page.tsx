@@ -157,31 +157,31 @@ export default function Home() {
         
         {/* Unauthenticated Landing State CTA */}
         {!user && (
-          <div className="relative overflow-hidden rounded-2xl border border-cyan-500/30 bg-gradient-to-r from-cyan-950/40 via-indigo-950/30 to-purple-950/20 p-6 backdrop-blur-xl shadow-2xl">
+          <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#24272c] p-7 backdrop-blur-xl shadow-2xl">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-              <div className="space-y-2 max-w-2xl">
+              <div className="space-y-2.5 max-w-2xl">
                 <div className="flex items-center gap-2">
-                  <span className="flex h-2 w-2 rounded-full bg-cyan-400 animate-ping"></span>
-                  <span className="font-mono text-xs uppercase tracking-widest text-cyan-400 font-semibold">
+                  <span className="flex h-2 w-2 rounded-full bg-[#ff5733] animate-ping"></span>
+                  <span className="font-mono text-xs uppercase tracking-widest text-[#ff8c42] font-semibold">
                     Google Cloud Run AI Challenge • Authentication Required
                   </span>
                 </div>
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
-                  Welcome to Aetheris AI — Cognitive Second Brain
+                <h2 className="font-serif-heading text-2xl sm:text-3xl font-bold tracking-tight text-white">
+                  Welcome to Aetheris AI — Cognitive Life OS
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                   Sign in with Firebase Auth to bind your user session to an isolated, multi-turn Firestore memory store, secured by Cloud Secret Manager.
                 </p>
                 <div className="flex flex-wrap items-center gap-3 pt-1 text-[11px] text-slate-400 font-mono">
-                  <span className="flex items-center gap-1 text-emerald-400">
+                  <span className="flex items-center gap-1.5 text-emerald-400">
                     <Shield className="h-3.5 w-3.5" /> Firebase Auth
                   </span>
                   <span>•</span>
-                  <span className="flex items-center gap-1 text-indigo-300">
+                  <span className="flex items-center gap-1.5 text-[#ff8c42]">
                     <Brain className="h-3.5 w-3.5" /> Multi-turn Gemini 3.6
                   </span>
                   <span>•</span>
-                  <span className="flex items-center gap-1 text-cyan-300">
+                  <span className="flex items-center gap-1.5 text-cyan-300">
                     <Activity className="h-3.5 w-3.5" /> Firestore User Isolation
                   </span>
                 </div>
@@ -190,7 +190,7 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row w-full md:w-auto items-stretch sm:items-center gap-3 shrink-0">
                 <button
                   onClick={() => setIsAuthOpen(true)}
-                  className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 px-5 py-3 text-xs sm:text-sm font-semibold text-white hover:from-cyan-400 hover:to-indigo-500 transition-all shadow-lg shadow-indigo-500/25"
+                  className="flex items-center justify-center gap-2 rounded-2xl bg-[#ff5733] hover:bg-[#ff6d4d] px-6 py-3.5 text-xs sm:text-sm font-semibold text-white transition-all shadow-xl shadow-[#ff5733]/25 active:scale-98"
                 >
                   <Sparkles className="h-4 w-4" />
                   <span>Sign In / Launch Sandbox</span>
@@ -209,8 +209,8 @@ export default function Home() {
         />
 
         {/* Navigation Tabs Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.06] pb-3">
-          <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-3.5">
+          <div className="flex items-center gap-2">
             {[
               { id: 'stream', label: 'Reflect & Triage', icon: Sparkles, badge: null },
               { id: 'matrix', label: 'Action Matrix', icon: CheckSquare, badge: allActionItems.length },
@@ -223,16 +223,18 @@ export default function Home() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition-all ${
+                  className={`flex items-center gap-2 rounded-2xl px-4 py-2 text-xs font-semibold transition-all ${
                     isActive
-                      ? 'bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm shadow-cyan-500/10'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] border border-transparent'
+                      ? 'bg-[#ff5733] text-white shadow-md shadow-[#ff5733]/20'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-[#24272c] border border-transparent'
                   }`}
                 >
-                  <Icon className={`h-3.5 w-3.5 ${isActive ? 'text-cyan-400' : 'text-slate-500'}`} />
+                  <Icon className={`h-3.5 w-3.5 ${isActive ? 'text-white' : 'text-slate-400'}`} />
                   <span>{tab.label}</span>
                   {tab.badge !== null && (
-                    <span className="rounded-full bg-white/[0.08] px-1.5 py-0.2 font-mono text-[9px] text-slate-300">
+                    <span className={`rounded-full px-1.5 py-0.2 font-mono text-[9px] ${
+                      isActive ? 'bg-black/25 text-white' : 'bg-white/[0.08] text-slate-300'
+                    }`}>
                       {tab.badge}
                     </span>
                   )}
@@ -241,7 +243,7 @@ export default function Home() {
             })}
           </div>
 
-          <div className="hidden md:flex items-center gap-2 text-[11px] text-slate-500 font-mono">
+          <div className="hidden md:flex items-center gap-2 text-[11px] text-slate-400 font-mono">
             <span>Model: Gemini 3.6 Flash Fallback Ladder</span>
             <span>•</span>
             <span className="text-emerald-400">Isolated Storage</span>

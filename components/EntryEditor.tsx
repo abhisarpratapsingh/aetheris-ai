@@ -85,14 +85,44 @@ export const EntryEditor: React.FC<EntryEditorProps> = ({ onSubmit, isAnalyzing 
     };
   }, [isRecording]);
 
+  const recognitionRef = useRef<any>(null);
+
   const toggleRecording = () => {
     if (isRecording) {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
       setIsRecording(false);
       if (!text) {
-        setText("Voice Reflection: Discussing Cloud Run autoscaling policies and caching Gemini tokens via Secret Manager to maintain sub-500ms inference latency.");
+        setText("Voice Reflection: Hardening Cloud Run autoscaling and Secret Manager cache for low-latency cognitive processing.");
       }
     } else {
       setIsRecording(true);
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        try {
+          const recognition = new SpeechRecognition();
+          recognition.continuous = true;
+          recognition.interimResults = true;
+          recognition.lang = 'en-US';
+          recognition.onresult = (event: any) => {
+            let transcript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+              transcript += event.results[i][0].transcript;
+            }
+            if (transcript.trim()) {
+              setText((prev) => (prev ? `${prev} ${transcript.trim()}` : transcript.trim()));
+            }
+          };
+          recognition.onerror = () => {
+            // Graceful fallback to simulator if mic access is not granted in iframe
+          };
+          recognition.start();
+          recognitionRef.current = recognition;
+        } catch {
+          // Fallback handled by audio waveform timer
+        }
+      }
     }
   };
 
@@ -116,11 +146,11 @@ export const EntryEditor: React.FC<EntryEditorProps> = ({ onSubmit, isAnalyzing 
   };
 
   return (
-    <div className="relative overflow-hidden rounded-2xl glass-panel p-6 transition-all duration-300">
+    <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#24272c] p-6 sm:p-7 shadow-xl transition-all duration-300">
       
       {/* Top Bar: Categories & Quick Inspirations */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
           {[
             { id: 'reflection', label: 'Reflection', icon: Compass },
             { id: 'brainstorm', label: 'Brainstorm', icon: Sparkles },
@@ -134,13 +164,13 @@ export const EntryEditor: React.FC<EntryEditorProps> = ({ onSubmit, isAnalyzing 
               <button
                 key={cat.id}
                 onClick={() => setCategory(cat.id)}
-                className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 font-medium transition-all ${
+                className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 font-medium transition-all ${
                   isSelected
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm shadow-cyan-500/10'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] border border-transparent'
+                    ? 'bg-white text-slate-900 font-semibold shadow-md shadow-white/10'
+                    : 'bg-[#1c1e22] text-slate-400 hover:text-slate-200 border border-white/[0.06]'
                 }`}
               >
-                <Icon className={`h-3 w-3 ${isSelected ? 'text-cyan-400' : 'text-slate-500'}`} />
+                <Icon className={`h-3 w-3 ${isSelected ? 'text-slate-900' : 'text-slate-400'}`} />
                 <span>{cat.label}</span>
               </button>
             );
@@ -149,13 +179,13 @@ export const EntryEditor: React.FC<EntryEditorProps> = ({ onSubmit, isAnalyzing 
 
         {/* Quick prompt injector pills */}
         <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
-          <Wand2 className="h-3 w-3 text-cyan-400" />
-          <span className="font-mono text-[10px] text-slate-500">Inspirations:</span>
+          <Wand2 className="h-3 w-3 text-[#ff8c42]" />
+          <span className="font-mono text-[10px] text-slate-400">Prompts:</span>
           {SAMPLE_PROMPTS.map((sample, i) => (
             <button
               key={i}
               onClick={() => setText(sample.text)}
-              className="rounded-lg border border-white/[0.06] bg-slate-900/60 px-2 py-0.5 text-[11px] text-slate-300 hover:border-cyan-500/40 hover:text-cyan-300 transition-all"
+              className="rounded-full border border-white/[0.08] bg-[#1c1e22] px-2.5 py-0.5 text-[11px] text-slate-300 hover:border-[#ff5733]/40 hover:text-[#ff8c42] transition-all"
             >
               {sample.label}
             </button>
@@ -172,7 +202,7 @@ export const EntryEditor: React.FC<EntryEditorProps> = ({ onSubmit, isAnalyzing 
           placeholder="What is occupying your mental RAM right now? Speak or type your raw, unfiltered stream of consciousness..."
           rows={4}
           disabled={isAnalyzing}
-          className="w-full resize-none rounded-xl border border-white/[0.08] bg-[#070b14]/70 p-4 font-sans text-sm text-slate-100 placeholder-slate-500 focus:border-cyan-500/60 focus:bg-[#070b14]/90 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all leading-relaxed"
+          className="w-full resize-none rounded-2xl border border-white/[0.08] bg-[#1c1e22] p-4 font-sans text-sm text-slate-100 placeholder-slate-400 focus:border-[#ff5733]/60 focus:bg-[#181a1d] focus:outline-none focus:ring-2 focus:ring-[#ff5733]/15 transition-all leading-relaxed"
         />
 
         {/* Live Audio recording visualizer overlay */}
@@ -278,9 +308,9 @@ export const EntryEditor: React.FC<EntryEditorProps> = ({ onSubmit, isAnalyzing 
 
         {/* Submit */}
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-1 font-mono text-[10px] text-slate-500">
+          <div className="hidden sm:flex items-center gap-1 font-mono text-[10px] text-slate-400">
             <span>Commit:</span>
-            <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-[9px] text-slate-400">
+            <kbd className="rounded border border-white/[0.1] bg-[#1c1e22] px-1.5 py-0.5 text-[9px] text-slate-300">
               ⌘ Enter
             </kbd>
           </div>
@@ -288,16 +318,16 @@ export const EntryEditor: React.FC<EntryEditorProps> = ({ onSubmit, isAnalyzing 
           <button
             onClick={handleSubmit}
             disabled={!text.trim() || isAnalyzing}
-            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 px-5 py-2.5 text-xs font-semibold text-white shadow-xl shadow-indigo-500/20 hover:from-cyan-400 hover:to-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+            className="flex items-center gap-2 rounded-2xl bg-[#ff5733] hover:bg-[#ff6d4d] px-6 py-3 text-xs sm:text-sm font-semibold text-white shadow-xl shadow-[#ff5733]/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-98"
           >
             {isAnalyzing ? (
               <>
-                <Sparkles className="h-4 w-4 animate-spin text-cyan-200" />
+                <Sparkles className="h-4 w-4 animate-spin text-white" />
                 <span>Decomposing with Gemini...</span>
               </>
             ) : (
               <>
-                <Sparkles className="h-4 w-4 text-cyan-300" />
+                <Sparkles className="h-4 w-4 text-white" />
                 <span>Decompose with Gemini</span>
               </>
             )}

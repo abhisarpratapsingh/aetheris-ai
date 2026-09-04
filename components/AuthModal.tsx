@@ -58,46 +58,44 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-      <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+      <div className="w-full max-w-md rounded-3xl border border-white/[0.08] bg-[#24272c] p-7 shadow-2xl relative animate-in fade-in zoom-in-95 duration-150">
         
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-lg p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors"
+          className="absolute right-5 top-5 rounded-xl p-1.5 text-slate-400 hover:text-slate-200 hover:bg-[#1c1e22] transition-colors"
         >
           <X className="h-5 w-5" />
         </button>
 
         {/* Icon & Title */}
         <div className="text-center pt-2">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-cyan-500 to-indigo-600 p-[1px] shadow-lg shadow-indigo-500/20 mb-3">
-            <div className="flex h-full w-full items-center justify-center rounded-2xl bg-slate-950">
-              <Lock className="h-6 w-6 text-cyan-400" />
-            </div>
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ff5733]/15 border border-[#ff5733]/30 mb-3 shadow-lg shadow-[#ff5733]/20">
+            <Lock className="h-6 w-6 text-[#ff5733]" />
           </div>
-          <h2 className="text-lg font-semibold text-white">Authenticate to Aetheris</h2>
+          <h2 className="font-serif-heading text-xl font-bold text-white">Authenticate to Aetheris</h2>
           <p className="text-xs text-slate-400 mt-1">
             Zero-leakage, cryptographic Firestore isolation
           </p>
         </div>
 
         {/* Security badges */}
-        <div className="my-5 rounded-xl border border-slate-800 bg-slate-950/60 p-3.5 space-y-2 text-xs">
+        <div className="my-5 rounded-2xl border border-white/[0.06] bg-[#1c1e22] p-4 space-y-2 text-xs">
           <div className="flex items-center gap-2 text-slate-300">
             <ShieldCheck className="h-4 w-4 text-emerald-400 shrink-0" />
-            <span>Isolated Firestore collection path <code className="text-cyan-300">/users/{'{uid}'}/*</code></span>
+            <span>Isolated Firestore path <code className="text-[#ff8c42]">/users/{'{uid}'}/*</code></span>
           </div>
           <div className="flex items-center gap-2 text-slate-300">
-            <KeyRound className="h-4 w-4 text-indigo-400 shrink-0" />
+            <KeyRound className="h-4 w-4 text-[#ff5733] shrink-0" />
             <span>Google Cloud Secret Manager runtime key protection</span>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="space-y-2.5">
+        <div className="space-y-3">
           <button
             onClick={handleGoogleSignIn}
-            className="w-full flex items-center justify-center gap-3 rounded-xl border border-slate-700 bg-slate-800/90 py-2.5 px-4 text-xs font-semibold text-white hover:bg-slate-700 hover:border-slate-600 transition-all shadow-sm"
+            className="w-full flex items-center justify-center gap-3 rounded-2xl border border-white/[0.1] bg-[#1c1e22] py-3 px-4 text-xs font-semibold text-white hover:bg-[#2d3137] hover:border-white/20 transition-all shadow-sm active:scale-98"
           >
             <svg className="h-4 w-4" viewBox="0 0 24 24">
               <path
@@ -122,14 +120,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
           <button
             onClick={handleDemoSignIn}
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 py-2.5 px-4 text-xs font-semibold text-white hover:from-cyan-400 hover:to-indigo-500 transition-all shadow-md shadow-indigo-500/20"
+            className="w-full flex items-center justify-center gap-2 rounded-2xl bg-[#ff5733] hover:bg-[#ff6d4d] py-3 px-4 text-xs font-semibold text-white transition-all shadow-lg shadow-[#ff5733]/25 active:scale-98"
           >
             <Sparkles className="h-4 w-4" />
             <span>Launch Instant Executive Sandbox</span>
           </button>
         </div>
 
-        <p className="mt-4 text-center text-[10px] text-slate-500">
+        <p className="mt-4 text-center text-[10px] text-slate-400">
           Complies with Google Cloud Run Challenge Authentication Specifications.
         </p>
 

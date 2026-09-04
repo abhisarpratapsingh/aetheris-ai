@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     const rawText = typeof body.rawText === 'string' ? body.rawText : '';
     const category = typeof body.category === 'string' ? body.category : 'reflection';
     const audioDurationSec = typeof body.audioDurationSec === 'number' ? body.audioDurationSec : undefined;
-    const location = safeObject(body.location, undefined);
+    const location = safeObject<any>(body.location, undefined);
 
     if (!rawText.trim()) {
       return NextResponse.json(
@@ -44,7 +44,10 @@ export async function POST(req: NextRequest) {
     const threatReport = analyzeAndSanitizeInput(rawText);
 
     // 4. Structured Cognitive Decomposition via Gemini (with Model Fallback Ladder)
-    const { analysis, keySource, modelUsed, fallbackAttempts } = await runCognitiveAnalysis(threatReport.sanitizedText);
+    const { analysis, keySource, modelUsed, fallbackAttempts } = await runCognitiveAnalysis(
+      threatReport.sanitizedText,
+      location ? { name: location.name, formattedAddress: location.formattedAddress } : undefined
+    );
 
     // 5. Attach verifiable security telemetry stamp
     const executionTimeMs = Date.now() - startTime;

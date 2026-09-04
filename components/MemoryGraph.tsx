@@ -149,16 +149,16 @@ export const MemoryGraph: React.FC<MemoryGraphProps> = ({ nodes }) => {
   };
 
   return (
-    <div className="rounded-2xl glass-panel p-6 shadow-2xl">
+    <div className="rounded-3xl border border-white/[0.08] bg-[#24272c] p-6 sm:p-7 shadow-xl">
       
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+          <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#ff5733]/15 border border-[#ff5733]/30 text-[#ff5733]">
             <Network className="h-4 w-4" />
           </div>
           <div>
-            <h3 className="font-semibold text-sm text-slate-100">Interactive Thought Constellation</h3>
+            <h3 className="font-serif-heading font-bold text-base sm:text-lg text-white">Interactive Thought Constellation</h3>
             <p className="text-[11px] text-slate-400">Semantic Dot-Connecting & Concept Cluster Topology</p>
           </div>
         </div>
@@ -167,7 +167,7 @@ export const MemoryGraph: React.FC<MemoryGraphProps> = ({ nodes }) => {
         <div className="flex items-center gap-2">
           <div className="hidden sm:flex items-center gap-2 text-[10px] font-mono">
             <span className="flex items-center gap-1 text-cyan-400"><span className="h-2 w-2 rounded-full bg-cyan-400"></span>Project</span>
-            <span className="flex items-center gap-1 text-indigo-400"><span className="h-2 w-2 rounded-full bg-indigo-400"></span>Insight</span>
+            <span className="flex items-center gap-1 text-[#ff8c42]"><span className="h-2 w-2 rounded-full bg-[#ff5733]"></span>Insight</span>
             <span className="flex items-center gap-1 text-purple-400"><span className="h-2 w-2 rounded-full bg-purple-400"></span>Theme</span>
             <span className="flex items-center gap-1 text-emerald-400"><span className="h-2 w-2 rounded-full bg-emerald-400"></span>Habit</span>
             <span className="flex items-center gap-1 text-rose-400"><span className="h-2 w-2 rounded-full bg-rose-400"></span>Blocker</span>
@@ -175,7 +175,7 @@ export const MemoryGraph: React.FC<MemoryGraphProps> = ({ nodes }) => {
 
           <button
             onClick={reseedPositions}
-            className="rounded-xl border border-white/[0.08] bg-slate-900/60 p-2 text-slate-400 hover:text-white transition-colors"
+            className="rounded-2xl border border-white/[0.08] bg-[#1c1e22] p-2 text-slate-400 hover:text-white transition-all active:scale-98"
             title="Re-layout Nodes"
           >
             <RefreshCw className="h-3.5 w-3.5" />
@@ -184,7 +184,7 @@ export const MemoryGraph: React.FC<MemoryGraphProps> = ({ nodes }) => {
       </div>
 
       {/* Canvas */}
-      <div className="mt-4 relative rounded-xl border border-white/[0.06] bg-[#050811] overflow-hidden">
+      <div className="mt-4 relative rounded-2xl border border-white/[0.06] bg-[#181a1d] overflow-hidden">
         <canvas
           ref={canvasRef}
           width={640}
@@ -194,14 +194,14 @@ export const MemoryGraph: React.FC<MemoryGraphProps> = ({ nodes }) => {
         />
 
         {selectedNode && (
-          <div className="absolute bottom-3 left-3 rounded-xl border border-cyan-500/40 bg-[#0c1220]/95 p-3 text-xs backdrop-blur-xl shadow-2xl animate-in fade-in zoom-in-95 max-w-xs">
+          <div className="absolute bottom-3 left-3 rounded-2xl border border-white/[0.1] bg-[#24272c]/95 p-3.5 text-xs backdrop-blur-xl shadow-2xl animate-in fade-in zoom-in-95 max-w-xs">
             <div className="flex items-center gap-2 font-medium text-slate-100">
               <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: getGroupColor(selectedNode.group) }} />
               <span className="font-semibold text-sm">{selectedNode.label}</span>
               <span className="text-[10px] font-mono text-slate-400 capitalize">({selectedNode.group})</span>
             </div>
             <p className="text-[11px] text-slate-400 mt-1.5 leading-relaxed">
-              Linked across <span className="text-cyan-300 font-mono font-bold">{selectedNode.connections.length}</span> related memory threads in your Second Brain.
+              Linked across <span className="text-[#ff8c42] font-mono font-bold">{selectedNode.connections.length}</span> related memory threads in your Second Brain.
             </p>
           </div>
         )}

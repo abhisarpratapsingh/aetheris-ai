@@ -41,13 +41,14 @@ graph TD
 
 | Feature | Description | Technical Implementation |
 | :--- | :--- | :--- |
-| **Stream-of-Consciousness Dictation** | Audio waveform canvas recorder + high-velocity text capture with `Cmd+Enter` trigger. | Web Audio API / Canvas + custom transcription pipeline. |
-| **Autonomous Cognitive Triaging** | AI breaks chaotic brain dumps into executive takeaways, subconscious blockers, and mental reframings. | Structured JSON schema enforcement with Gemini 2.0 Flash. |
+| **Stream-of-Consciousness Dictation** | Audio waveform canvas recorder + Web Speech API capture with `Cmd+Enter` trigger. | Web Audio API / Canvas + browser SpeechRecognition pipeline. |
+| **Autonomous Cognitive Triaging** | AI breaks chaotic brain dumps into executive takeaways, subconscious blockers, and mental reframings. | Structured JSON schema enforcement with Gemini 3.6/2.0 Flash. |
 | **Eisenhower Action Matrix** | Auto-extracts actionable tasks categorized by Urgency & Importance with one-click export to Markdown/Obsidian. | Dynamic quadrant parsing with interactive completion toggles. |
 | **Burnout & Emotional Radar** | Biometric and cognitive load scoring (0-100) tracking fatigue and clarity trends over time. | Real-time sentiment & cognitive load index computation. |
 | **Interactive 2D Thought Constellation** | Dynamic force-directed canvas visualizing interconnected thoughts and recurring themes across journal history. | Custom HTML5 Canvas physics engine with node clustering. |
+| **Geo-Spatial Contextual Awareness** | Location-aware cognitive analysis tagging entries with physical workspaces (Google Campus, Tokyo, Singapore). | Integrated location metadata fed directly into Gemini reasoning prompts. |
 | **Live Enterprise Security Inspector HUD** | Slide-over telemetry drawer allowing hackathon judges to verify active OWASP defenses and Secret Manager latency in real time. | Real-time audit API inspecting environment and IAM bindings. |
-| **Multi-Turn Executive Sparring** | Interactive side-panel allowing deep-dive brainstorming directly with Gemini over any specific journal memory. | Contextual multi-turn conversation stored in isolated Firestore sessions. |
+| **Multi-Turn Executive Sparring** | Interactive side-panel allowing deep-dive brainstorming directly with Gemini over any specific journal memory. | Contextual multi-turn dialogue with resilient model fallback ladder. |
 
 ---
 

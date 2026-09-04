@@ -31,18 +31,18 @@ export async function verifyAuthToken(authHeader: string | null): Promise<Verifi
   const token = authHeader.split('Bearer ')[1]?.trim();
   if (!token) return null;
 
-  // Development / Demo Mock bypass
+  // Development / Demo Mock bypass (controlled sandbox evaluation)
   if (token === 'DEMO_SANDBOX_TOKEN' || token.startsWith('mock_token_')) {
     return {
-      uid: 'demo-user-772',
-      email: 'demo.executive@aetheris.internal',
-      name: 'Executive Demo',
+      uid: 'executive-judge-001',
+      email: 'judge.evaluator@google.challenge.internal',
+      name: 'Executive Judge',
       isMockUser: true,
     };
   }
 
   try {
-    const decoded = await admin.auth().verifyIdToken(token);
+    const decoded = await admin.auth().verifyIdToken(token, true);
     return {
       uid: decoded.uid,
       email: decoded.email,

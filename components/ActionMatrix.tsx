@@ -54,19 +54,19 @@ export const ActionMatrix: React.FC<ActionMatrixProps> = ({ items: initialItems,
   ];
 
   return (
-    <div className="rounded-2xl glass-panel p-6 shadow-2xl transition-all">
+    <div className="rounded-3xl border border-white/[0.08] bg-[#24272c] p-6 sm:p-7 shadow-xl transition-all">
       
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/[0.06]">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+          <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#ff5733]/15 border border-[#ff5733]/30 text-[#ff5733]">
             <CheckSquare className="h-4 w-4" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-sm text-slate-100">Eisenhower Action Matrix</h3>
-              <span className="rounded-full border border-white/[0.08] bg-slate-800/80 px-2 py-0.5 font-mono text-[10px] text-emerald-400">
-                {completedCount}/{items.length} Resolved ({progressPct}%)
+              <h3 className="font-serif-heading font-bold text-base sm:text-lg text-white">Tasks & Eisenhower Action Matrix</h3>
+              <span className="rounded-full border border-white/[0.1] bg-[#1c1e22] px-2.5 py-0.5 font-mono text-[10px] text-[#ff8c42] font-semibold">
+                {completedCount}/{items.length} Settle ({progressPct}%)
               </span>
             </div>
             <p className="text-[11px] text-slate-400">Autonomous Task Triage & Deep Work Priority Queue</p>
@@ -75,19 +75,19 @@ export const ActionMatrix: React.FC<ActionMatrixProps> = ({ items: initialItems,
 
         {/* View mode toggle & Copy */}
         <div className="flex items-center gap-2.5">
-          <div className="flex items-center rounded-xl border border-white/[0.08] bg-[#070b14] p-1 text-xs">
+          <div className="flex items-center rounded-2xl border border-white/[0.08] bg-[#1c1e22] p-1 text-xs">
             <button
               onClick={() => setViewMode('matrix')}
-              className={`rounded-lg px-2.5 py-1 font-medium transition-all ${
-                viewMode === 'matrix' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:text-white'
+              className={`rounded-xl px-3 py-1 font-medium transition-all ${
+                viewMode === 'matrix' ? 'bg-[#24272c] text-white shadow-sm' : 'text-slate-400 hover:text-white'
               }`}
             >
               Matrix
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`rounded-lg px-2.5 py-1 font-medium transition-all ${
-                viewMode === 'list' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:text-white'
+              className={`rounded-xl px-3 py-1 font-medium transition-all ${
+                viewMode === 'list' ? 'bg-[#24272c] text-white shadow-sm' : 'text-slate-400 hover:text-white'
               }`}
             >
               List
@@ -96,23 +96,23 @@ export const ActionMatrix: React.FC<ActionMatrixProps> = ({ items: initialItems,
 
           <button
             onClick={copyAsMarkdown}
-            className="flex items-center gap-1.5 rounded-xl border border-white/[0.08] bg-slate-900/80 px-3 py-1.5 text-xs text-slate-300 hover:border-white/20 hover:text-white transition-all shadow-sm"
+            className="flex items-center gap-1.5 rounded-2xl border border-white/[0.08] bg-[#1c1e22] px-3.5 py-1.5 text-xs text-slate-300 hover:border-[#ff5733]/50 hover:text-white transition-all shadow-sm active:scale-98"
           >
-            {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
-            <span className="text-[11px]">{copied ? 'Copied' : 'Obsidian Export'}</span>
+            {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5 text-[#ff8c42]" />}
+            <span className="text-[11px] font-medium">{copied ? 'Copied' : 'Obsidian Export'}</span>
           </button>
         </div>
       </div>
 
       {/* Progress Bar */}
       <div className="mt-4 flex items-center gap-3">
-        <div className="flex-1 h-1.5 w-full rounded-full bg-slate-800/80 overflow-hidden">
+        <div className="flex-1 h-2 w-full rounded-full bg-slate-800 overflow-hidden">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-cyan-400 transition-all duration-500 shadow-sm shadow-emerald-500/50"
+            className="h-full rounded-full bg-gradient-to-r from-[#ff5733] to-[#ff8c42] transition-all duration-500 shadow-sm shadow-[#ff5733]/50"
             style={{ width: `${progressPct}%` }}
           />
         </div>
-        <span className="font-mono text-[10px] text-slate-400 shrink-0">{progressPct}% Settle</span>
+        <span className="font-mono text-[10px] text-slate-400 shrink-0">{progressPct}% Resolved</span>
       </div>
 
       {/* Content */}
@@ -121,30 +121,30 @@ export const ActionMatrix: React.FC<ActionMatrixProps> = ({ items: initialItems,
           {quadrants.map((q) => {
             const quadrantItems = filteredItems.filter((i) => i.quadrant === q.id);
             return (
-              <div key={q.id} className={`rounded-xl border ${q.border} p-3.5 flex flex-col justify-between`}>
+              <div key={q.id} className="rounded-2xl border border-white/[0.06] bg-[#1c1e22] p-4 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between mb-2.5">
-                    <span className={`text-[11px] font-mono font-semibold uppercase tracking-wider ${q.color}`}>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-200">
                       {q.title}
                     </span>
-                    <span className="rounded-md bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-mono text-slate-400">
+                    <span className="rounded-full bg-white/[0.08] px-2 py-0.5 text-[10px] font-mono text-[#ff8c42]">
                       {quadrantItems.length}
                     </span>
                   </div>
 
                   <div className="space-y-2">
                     {quadrantItems.length === 0 ? (
-                      <div className="py-4 text-center text-xs text-slate-600 italic">No tasks in this quadrant</div>
+                      <div className="py-4 text-center text-xs text-slate-500 italic">No tasks in this quadrant</div>
                     ) : (
                       quadrantItems.map((item) => (
                         <div
                           key={item.id}
                           onClick={() => toggle(item.id)}
-                          className={`group flex items-start gap-2.5 rounded-xl border border-white/[0.06] bg-[#070b14]/70 p-3 text-xs transition-all cursor-pointer hover:border-white/20 hover:bg-[#070b14]/90 ${
+                          className={`group flex items-start gap-3 rounded-2xl border border-white/[0.06] bg-[#24272c] p-3.5 text-xs transition-all cursor-pointer hover:border-[#ff5733]/40 hover:bg-[#2d3137] ${
                             item.completed ? 'opacity-40' : ''
                           }`}
                         >
-                          <button className="mt-0.5 text-slate-500 group-hover:text-cyan-400 transition-colors shrink-0">
+                          <button className="mt-0.5 text-slate-400 group-hover:text-[#ff5733] transition-colors shrink-0">
                             {item.completed ? (
                               <CheckCircle2 className="h-4 w-4 text-emerald-400" />
                             ) : (
@@ -152,18 +152,18 @@ export const ActionMatrix: React.FC<ActionMatrixProps> = ({ items: initialItems,
                             )}
                           </button>
                           <div className="flex-1 min-w-0">
-                            <p className={`font-medium leading-snug ${item.completed ? 'line-through text-slate-500' : 'text-slate-200'}`}>
+                            <p className={`font-medium leading-snug ${item.completed ? 'line-through text-slate-500' : 'text-slate-100'}`}>
                               {item.title}
                             </p>
-                            <div className="mt-2 flex items-center gap-2 text-[10px] text-slate-400">
-                              <span className={`font-mono font-semibold uppercase ${
-                                item.priority === 'critical' ? 'text-rose-400' :
-                                item.priority === 'high' ? 'text-amber-400' : 'text-cyan-400'
+                            <div className="mt-2.5 flex items-center gap-2 text-[10px] text-slate-400">
+                              <span className={`font-mono font-bold uppercase px-2 py-0.5 rounded-full ${
+                                item.priority === 'critical' ? 'bg-rose-500/20 text-rose-300' :
+                                item.priority === 'high' ? 'bg-[#ff5733]/20 text-[#ff8c42]' : 'bg-slate-700/50 text-slate-300'
                               }`}>
                                 {item.priority}
                               </span>
                               <span>•</span>
-                              <span className="flex items-center gap-1 font-mono text-slate-500">
+                              <span className="flex items-center gap-1 font-mono text-slate-400">
                                 <Clock className="h-3 w-3" />
                                 ~{item.estimatedMinutes}m
                               </span>

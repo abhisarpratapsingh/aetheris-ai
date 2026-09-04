@@ -11,6 +11,17 @@ module.exports = {
         background: "#090d16",
         surface: "#0f172a",
         surfaceElevated: "#1e293b",
+        editorial: {
+          dark: "#1c1e22",
+          card: "#24272c",
+          elevated: "#2d3137",
+          border: "rgba(255, 255, 255, 0.08)",
+          textPrimary: "#f8fafc",
+          textSecondary: "#94a3b8",
+          coral: "#ff5733",
+          coralHover: "#ff6d4d",
+          coralLight: "rgba(255, 87, 51, 0.15)",
+        },
         accent: {
           blue: "#38bdf8",
           purple: "#818cf8",
